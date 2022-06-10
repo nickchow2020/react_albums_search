@@ -1,25 +1,68 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import './css/App.css'; 
+import Header from './Header';
+import Main from './Main';
+let defaultDisplay = 20;
+let addOn = 10;
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+class App extends React.Component{
+
+
+  constructor(){
+    super()
+    this.state = {
+      fetchData : {},
+      neededData: {},
+      searchKey: "",
+      loading: false
+    }
+
+    this.fetchData = this.fetchData.bind(this)
+    this.addMore = this.addMore.bind(this)
+  }
+
+  async fetchData(name){
+    let  URL = `https://itunes.apple.com/search?term=${name}&media=music&entity=album&attribute=artistTerm&limit=200`
+    try{
+        await fetch(URL)
+        .then( data => data.json())
+        .then( data => {
+          this.setState({
+            fetchData:data,
+            searchKey:name,
+            loading: true,
+            neededData:{
+              resultCount : data.results.slice(0,defaultDisplay).length,
+              results: data.results.slice(0,defaultDisplay)
+            }
+          })
+        })
+        
+    }catch(err){
+        throw err
+    }
+  }
+
+  addMore(){
+    defaultDisplay += addOn
+    this.setState({
+      neededData:{
+        resultCount : this.state.fetchData.results.slice(0, defaultDisplay).length,
+        results: this.state.fetchData.results.slice(0, defaultDisplay)
+      }
+    })
+  }
+
+  render() {
+    return (
+      <>
+      <Header fetchData={this.fetchData}/>
+      <Main loading={this.state.loading} addOn={this.addMore} data={this.state.neededData} searchKey={this.state.searchKey}/>
+      </>
+    )
+  }
 }
+
 
 export default App;
