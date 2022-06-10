@@ -11,7 +11,7 @@ class Main extends React.Component{
     return (
       <main className="wrapper">
           {
-            loading ? <SearchSummary keyword={searchKey} count={data.resultCount}/> : <Loading /> 
+            loading ? <SearchSummary keyword={searchKey} count={data.resultCount} /> :  <Loading /> 
           }
           <main className="main__main">
             {

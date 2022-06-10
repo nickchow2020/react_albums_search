@@ -15,7 +15,7 @@ class App extends React.Component{
       fetchData : {},
       neededData: {},
       searchKey: "",
-      loading: false
+      loading: true
     }
 
     this.fetchData = this.fetchData.bind(this)
@@ -23,6 +23,11 @@ class App extends React.Component{
   }
 
   async fetchData(name){
+
+    this.setState({
+      loading: false,
+    })
+    
     let  URL = `https://itunes.apple.com/search?term=${name}&media=music&entity=album&attribute=artistTerm&limit=200`
     try{
         await fetch(URL)
@@ -31,7 +36,7 @@ class App extends React.Component{
           this.setState({
             fetchData:data,
             searchKey:name,
-            loading: true,
+            loading: !this.state.loading,
             neededData:{
               resultCount : data.results.slice(0,defaultDisplay).length,
               results: data.results.slice(0,defaultDisplay)
