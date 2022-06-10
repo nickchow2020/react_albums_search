@@ -7,7 +7,6 @@ import Loading from "./Loading";
 class Main extends React.Component{
   render(){
     const {data,addOn,searchKey,loading} = this.props
-
     return (
       <main className="wrapper">
           {
@@ -21,7 +20,6 @@ class Main extends React.Component{
           {
             data.results ? <AddMore addOn={addOn} /> : null
           }
-          
       </main>
     )
   }
